@@ -24,131 +24,161 @@ namespace Password_Checker__Generator_and_Cracker
       InitializeComponent();
     }
 
-    // Falls die Anzahl an Digits, Capitals und Symbols die Länge überschreiten, dass man deren Wert zurücksetzen
-    // kann.
-    int ValueOfDigitsBefore = 0, 
-      ValueOfCapitalsBefore = 0, 
-      ValueOfSymbolsBefore = 0;
-
     public void RandomPasswordGenerator()
     {
-      int len = (byte)slLength.Value;
-      int digits = (byte)slDigits.Value;
-      int capitals = (byte)slCapitals.Value;
-      int symbols = (byte)slSymbols.Value;
+        int len = (byte)slLength.Value;
+        int digits = (byte)slDigits.Value;
+        int capitals = (byte)slCapitals.Value;
+        int symbols = (byte)slSymbols.Value;
 
-      ValueOfDigitsBefore = digits;
-      ValueOfCapitalsBefore = capitals;
-      ValueOfSymbolsBefore = symbols;
+        // Überprüfen, ob die Summe der Anforderungen die Passwortlänge überschreitet
+        int sum = digits + capitals + symbols;
+        if (sum > len)
+        {
+            // Passen Sie die Länge entsprechend an, um Platz für alle Anforderungen zu schaffen
+            len = sum;
+            slLength.Value = len;
+        }
 
-      // Kleinbuchstaben
-      const string ValidAbcLow = "abcdefghijklmnopqrstuvwxyz";
+        const string ValidAbcLow = "abcdefghijklmnopqrstuvwxyz";
+        const string ValidDigits = "1234567890";
+        const string ValidCapitals = "ABZDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string ValidSymbols = "^'=)(/&%ç*+°¦@#°§¬|¢´~!èà£[]{}öé-_.:,;";
 
-      // Zahlen
-      const string ValidDigits = "1234567890";
+            if (slLength.Value > 25)
+            {
+                tbxPassword.Margin = new Thickness(170, 0, 20, 0);
 
-      // Grossbuchstaben
-      const string ValidCapitals = "ABZDEFGHIJKLMNOPQRSTUVWXYZ";
+            }
+            else
+            {
+                tbxPassword.Margin = new Thickness(170, 0, 40, 51);
+                btnRefresh.Margin = new Thickness(0, 0, 167, 51);
+            }
 
-      // Symbolen
-      const string ValidSymbols = "^'=)(/&%ç*+°¦@#°§¬|¢´~!èà£[]{}öé-_.:,;";
+            StringBuilder resultDigits = new StringBuilder();
+        StringBuilder resultLow = new StringBuilder();
+        StringBuilder resultCapitals = new StringBuilder();
+        StringBuilder resultSymbols = new StringBuilder();
 
-      if (slLength.Value > 25)
-      {/*
-        btnRefresh.Margin = new Thickness(337, 91, 325, 68);
-        tbxPassword.Margin = new Thickness(125, -10, 122, 119);
-        btnCheckPass.Margin = new Thickness(306, 162, 0, 0);*/
-        tbxPassword.Margin = new Thickness(170, 0, 20, 0);
+        Random rand = new Random();
 
-      }
-      else
-      {
-        tbxPassword.Margin = new Thickness(170, 0, 40, 51);
-        btnRefresh.Margin = new Thickness(0, 0, 167, 51);
-      }
+        for (int i = 0; i < digits; i++)
+        {
+            resultDigits.Append(ValidDigits[rand.Next(ValidDigits.Length)]);
+        }
 
-      // Random Zahlen generieren
-      StringBuilder resultDigits = new StringBuilder();
-      Random rand = new Random();
-      for (int i = 0; i < digits; i++)
-      {
-        resultDigits.Append(ValidDigits[rand.Next(ValidDigits.Length)]);
-      }
-      //while (0 < digits--)
-      //{
-      //  resultDigits.Append(ValidDigits[rand.Next(ValidDigits.Length)]);
-      //}
+        for (int i = 0; i < capitals; i++)
+        {
+            resultCapitals.Append(ValidCapitals[rand.Next(ValidCapitals.Length)]);
+        }
 
-      // Random Kleinbuchstaben generieren
-      StringBuilder resultLow = new StringBuilder();
-      len = len - digits - capitals - symbols;
-      for (int i = 0; i < len; i++)
-      {
-        resultLow.Append(ValidAbcLow[rand.Next(ValidAbcLow.Length)]);
-      }
+        for (int i = 0; i < symbols; i++)
+        {
+            resultSymbols.Append(ValidSymbols[rand.Next(ValidSymbols.Length)]);
+        }
 
-      len = (byte)slLength.Value;
+        // Berechnen Sie die Anzahl der Kleinbuchstaben, die benötigt werden
+        int remainingChars = len - (digits + capitals + symbols);
 
-      // Random Grossbuchstaben generieren
-      StringBuilder resultCapitals = new StringBuilder();
-      for (int i = 0; i < capitals; i++)
-      {
-        resultCapitals.Append(ValidCapitals[rand.Next(ValidCapitals.Length)]);
-      }
+        for (int i = 0; i < remainingChars; i++)
+        {
+            resultLow.Append(ValidAbcLow[rand.Next(ValidAbcLow.Length)]);
+        }
 
-      // Random Symbole generieren
-      StringBuilder resultSymbols = new StringBuilder();
-      for (int i = 0; i < symbols; i++)
-      {
-        resultSymbols.Append(ValidSymbols[rand.Next(ValidSymbols.Length)]);
-      }
+        string finalresult = resultDigits.ToString() + resultCapitals.ToString() + resultSymbols.ToString() + resultLow.ToString();
 
-      string finalresult = resultDigits.ToString() + resultCapitals.ToString() + resultSymbols.ToString() + resultLow.ToString();
+        // Mischen Sie das Ergebnis, um die Reihenfolge zufällig zu machen
+        string shuffledResult = new string(finalresult.OrderBy(c => rand.Next()).ToArray());
 
-      // Alles geht noch einmal ins Random
-      StringBuilder result4 = new StringBuilder();
+        tbxPassword.Text = shuffledResult;
 
-      for (int i = 0; i < len; i++)
-      {
-        result4.Append(finalresult[rand.Next(finalresult.Length)]);
-      }
-      try
-      {
-        tbxPassword.Text = result4.ToString();
-        string password = result4.ToString();
-
-        // Will copy the password
-        Clipboard.SetText(result4.ToString());
+        // Kopieren Sie das Passwort in die Zwischenablage
+        Clipboard.SetText(shuffledResult);
         lblCopy.Visibility = Visibility.Visible;
-      }
-      catch
-      {
-        MessageBox.Show("Bitte nicht zu schnell verschieben!");
-      }
     }
 
-    private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider changedSlider = sender as Slider;
+
+            double totalCharacterCount = slDigits.Value + slCapitals.Value + slSymbols.Value;
+
+            if (totalCharacterCount > slLength.Value)
+            {
+                // If the length is fixed at 50 and the total characters exceed it
+                if (slLength.Value == 50 && totalCharacterCount > 50)
+                {
+                    MessageBox.Show("The total count of digits, capitals, and symbols cannot exceed the length of 50!");
+                    // Adjust the sliders back to ensure they don't exceed 50
+                    AdjustSlidersToMaxLength(changedSlider);
+                }
+                else
+                {
+                    // Adjust the length to accommodate the total character count
+                    slLength.ValueChanged -= ColorSlider_ValueChanged; // Temporarily remove event handler
+                    slLength.Value = totalCharacterCount; // Set the value without triggering event
+                    slLength.ValueChanged += ColorSlider_ValueChanged; // Re-attach event handler
+                }
+            }
+            else
+            {
+                // Regenerate the random password since the total count is within the length limit
+                RandomPasswordGenerator();
+            }
+
+        }
+
+        private void AdjustSlidersToMaxLength(Slider changedSlider)
+        {
+            slLength.Value = 50;
+
+            // Create a dictionary of sliders and their names
+            Dictionary<string, Slider> sliders = new Dictionary<string, Slider>
     {
-      double cnt = slDigits.Value + slCapitals.Value + slSymbols.Value;
-      if (cnt > slLength.Value)
-      {
-        // Falls die Länge auf 50 und der Rest mehr ist
-        if (slLength.Value == 50 && cnt > 50)
-        {
-          MessageBox.Show("Die Anzahl Grossbuchstaben, Symbolen und Zahlen darf nicht die Länge überschreiten! ");
-        }
-        else
-        {
-          slLength.Value += (cnt - slLength.Value);
-        }
-      }
-      else
-      {
-        RandomPasswordGenerator();
-      }
-    }
+        { "slDigits", slDigits },
+        { "slCapitals", slCapitals },
+        { "slSymbols", slSymbols }
+    };
 
-    public void btnRefresh_Click(object sender, RoutedEventArgs e)
+            // Sort the dictionary by slider value in descending order
+            var sortedSliders = sliders.OrderByDescending(slider => slider.Value.Value);
+
+            // Get the name and value of the slider with the biggest value
+            var maxSlider = sortedSliders.First();
+
+            // Adjust other sliders based on the slider with the maximum value
+            if (maxSlider.Value != changedSlider)
+            {
+                if (maxSlider.Value == slDigits)
+                {
+                    AdjustSliderValue(slCapitals, slDigits.Value);
+                    AdjustSliderValue(slSymbols, slDigits.Value);
+                }
+                else if (maxSlider.Value == slCapitals)
+                {
+                    AdjustSliderValue(slDigits, slCapitals.Value);
+                    AdjustSliderValue(slSymbols, slCapitals.Value);
+                }
+                else if (maxSlider.Value == slSymbols)
+                {
+                    AdjustSliderValue(slDigits, slSymbols.Value);
+                    AdjustSliderValue(slCapitals, slSymbols.Value);
+                }
+            }
+        }
+
+
+        private void AdjustSliderValue(Slider slider, double subtractValue)
+        {
+            if (slider.Value > 0)
+            {
+                slider.Value -= subtractValue;
+            }
+        }
+
+
+        public void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
       if (slLength.Value == 0)
       {
