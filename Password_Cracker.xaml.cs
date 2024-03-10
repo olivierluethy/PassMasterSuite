@@ -29,10 +29,10 @@ namespace Password_Checker__Generator_and_Cracker
     {
       btnSeeCrack.Visibility = Visibility.Hidden;
 
-      listPossible.Items.Clear();
+        listPossible.Items.Clear();
 
-      // Das eingegebene Passwort
-      string password = tbxEntPassword.Text.ToString();
+            // Das eingegebene Passwort
+            string password = tbxEntPassword.Text.ToString();
 
       // Anzahl Versuche
       string attempt = "";
@@ -93,7 +93,10 @@ namespace Password_Checker__Generator_and_Cracker
         first++;
         cracks++;
       }
-      lblAttemps.Content = "Attemps to crack: " + cracks;
+            // Hide the loadingBorder
+            loadingGif.Visibility = Visibility.Collapsed;
+
+            lblAttemps.Content = "Attemps to crack: " + cracks;
       btnSeeCrack.Visibility = Visibility.Visible;
     }
 
@@ -240,6 +243,9 @@ namespace Password_Checker__Generator_and_Cracker
     // Main section
     private void btnStart_Click(object sender, RoutedEventArgs e)
     {
+    // Show the loadingBorder
+    loadingGif.Visibility = Visibility.Visible;
+
       string password = tbxEntPassword.Text.ToString();
       int length = tbxEntPassword.Text.Length;
 
