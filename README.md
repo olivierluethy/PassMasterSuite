@@ -1,6 +1,6 @@
 # PassMasterSuite
 
-PassMasterSuite is a versatile password management application written in C# WPF. It encompasses three key functionalities: a password cracker, password generator, and password checker. With PassMasterSuite, users can enhance their password security by generating strong passwords, testing password strength, and even cracking passwords under specific circumstances.
+PassMasterSuite is a versatile password management application written in C# WPF. It encompasses three key functionalities: a password cracker, a password generator, and a password checker. With PassMasterSuite, users can enhance their password security by generating strong passwords, testing password strength, and even cracking passwords under specific circumstances.
 
 ## Features
 
@@ -42,6 +42,11 @@ PassMasterSuite relies on the following dependencies:
 
 - .NET Framework
 - Windows Presentation Foundation (WPF)
+  
+## Useful links
+https://stackoverflow.com/questions/52017398/apply-dropshadoweffect-to-wpf-textbox-text
+https://stackoverflow.com/questions/210922/how-do-i-get-an-animated-gif-to-work-in-wpf
+https://stackoverflow.com/questions/43370098/adding-icon-property-to-xaml
 
 ## Contributions
 
