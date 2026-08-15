@@ -1,65 +1,71 @@
 # PassMasterSuite
 
-PassMasterSuite is a versatile password management application written in C# WPF. It encompasses three key functionalities: a password cracker, a password generator, and a password checker. With PassMasterSuite, users can enhance their password security by generating strong passwords, testing password strength, and even cracking passwords under specific circumstances.
+A modern, offline, **educational** password toolkit for Windows. One consistent dark app with
+three tools — a **Generator**, a **Checker**, and an educational **Cracker** that visualises how
+a brute-force attack would try to guess a password and estimates how long it would take.
 
-## Features
+Everything runs locally. Nothing is sent over the network, and the Cracker never attacks any real
+system — it only demonstrates, on a password you type in yourself, how guessing works.
 
-### 1. Password Cracker
-- Utilizes advanced algorithms to crack passwords under specified conditions.
-- Offers customizable settings to tailor cracking parameters.
-- Provides detailed feedback on cracking progress and results.
+## The three tools
 
-### 2. Password Generator
-- Generates strong, randomized passwords based on user-defined criteria.
-- Offers flexibility in selecting password length, character types, and other parameters.
-- Ensures enhanced security by creating unique passwords for different purposes.
+- **Generator** — build a random password from the character classes you choose (lowercase,
+  uppercase, digits, symbols) and a length slider. Reveal/hide, copy, regenerate, and a live
+  strength meter. Uses a cryptographically secure random generator.
+- **Checker** — measure a password's strength: entropy from its realized alphabet, which character
+  classes it uses, common-password and simple-pattern detection, a visual strength meter, and an
+  estimated time-to-crack shown across several attacker speeds.
+- **Cracker** — type a password and watch an animated brute-force demonstration: the current guess,
+  a live stream of recent attempts, a progress indicator, and a countdown of the estimated time
+  remaining. Pick an **attacker speed** (online throttled → GPU array) and watch the estimate change.
+  Weak passwords are cracked before your eyes and revealed; strong ones keep the guessing running
+  while showing just how astronomically long it would really take.
 
-### 3. Password Checker
-- Evaluates the strength and security level of passwords.
-- Utilizes industry-standard metrics to assess password complexity.
-- Offers insights and suggestions for improving password strength.
+The headline crack time is always **computed analytically** (`keyspace = alphabetSize ^ length`,
+`time = keyspace ÷ 2 ÷ guessesPerSecond`) — the app never iterates the real keyspace, so it never
+blocks or crashes.
 
-## Getting Started
+## Tech stack
 
-To get started with PassMasterSuite, follow these steps:
+- **.NET 8** (`net8.0-windows`), **WPF**, C#, SDK-style project.
+- One unified dark design system in `Themes/DesignSystem.xaml` (see `docs/STYLEGUIDE.md`).
+- Vector icons via **Segoe MDL2 Assets** glyphs — no image or GIF assets anywhere.
+- Animations via WPF Storyboards and a `DispatcherTimer` (no GIFs).
 
-1. Clone the repository to your local machine.
-2. Open the solution in Visual Studio.
-3. Build the solution to ensure all dependencies are resolved.
-4. Run the application to access the PassMasterSuite interface.
+## Run it
 
-## Usage
+Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download) on Windows (WPF is Windows-only).
 
-Upon launching PassMasterSuite, users will be presented with a user-friendly interface that allows them to access the following features:
+```bash
+dotnet run
+```
 
-- **Password Cracker**: Select cracking options and initiate the cracking process.
-- **Password Generator**: Customize password criteria and generate strong passwords.
-- **Password Checker**: Input passwords for analysis and receive feedback on their strength.
+Or open `PassMasterSuite.sln` in Visual Studio 2022 and press F5.
 
-## Dependencies
+## Project layout
 
-PassMasterSuite relies on the following dependencies:
+```
+App.xaml(.cs)            Application entry; merges the design system
+Themes/DesignSystem.xaml Unified dark design system (colors, type, components)
+Core/                    Pure logic (no UI): entropy, crack-time, generator, formatting
+  Charset.cs             Character-class analysis and alphabet size
+  PasswordStrength.cs    Entropy, rating, weaknesses, suggestions
+  CrackTime.cs           Analytic keyspace & crack-time math (BigInteger)
+  CrackModel.cs          Bundles the facts the Cracker visualises
+  AttackerPreset.cs      Attacker-speed presets (guesses/second)
+  PasswordGenerator.cs   Secure random password generation
+  DurationFormat.cs      Adaptive duration formatting (seconds → centuries)
+Controls/StrengthMeter   Reusable 5-segment strength meter
+Views/                   Shell + Home, Generator, Checker, Cracker (in-place switching)
+docs/                    CURRENT_STATE, CRITIQUE, STYLEGUIDE
+```
 
-- .NET Framework
-- Windows Presentation Foundation (WPF)
-  
-## Useful links
-https://stackoverflow.com/questions/52017398/apply-dropshadoweffect-to-wpf-textbox-text
-https://stackoverflow.com/questions/210922/how-do-i-get-an-animated-gif-to-work-in-wpf
-https://stackoverflow.com/questions/43370098/adding-icon-property-to-xaml
+## Docs
 
-## Contributions
-
-Contributions to PassMasterSuite are welcome! If you would like to contribute to the project, please fork the repository and submit a pull request with your proposed changes.
+- `docs/CURRENT_STATE.md` — how the original app worked before the rebuild.
+- `docs/CRITIQUE.md` — a hard critique of the original plus the improvement checklist.
+- `docs/STYLEGUIDE.md` — the unified dark design system used throughout.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-
-## Contact
-
-For questions or inquiries about PassMasterSuite, please contact the project maintainer:
-
-[spamemailol221@gmail.com]
-
----
+MIT.
