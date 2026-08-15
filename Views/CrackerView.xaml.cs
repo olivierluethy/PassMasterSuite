@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using PassMasterSuite.Core;
 
@@ -103,7 +104,7 @@ public partial class CrackerView : UserControl
         Prog.Value = 0;
 
         CandidateBox.BorderBrush = Brush("Brush.Accent");
-        CandidateBox.Effect = Effect("Effect.AccentGlow");
+        CandidateBox.Effect = FindEffect("Effect.AccentGlow");
         CurrentCandidate.Foreground = Brush("Brush.Accent");
         StatusText.Foreground = Brush("Brush.TextSecondary");
         StatusText.Text = _model.Realizable
@@ -159,7 +160,7 @@ public partial class CrackerView : UserControl
         CurrentCandidate.Text = _model!.Target;
         CurrentCandidate.Foreground = Brush("Brush.Success");
         CandidateBox.BorderBrush = Brush("Brush.Success");
-        CandidateBox.Effect = Effect("Effect.SuccessGlow");
+        CandidateBox.Effect = FindEffect("Effect.SuccessGlow");
 
         StatusText.Foreground = Brush("Brush.Success");
         StatusText.Text = $"Cracked! The password “{_model.Target}” was found by brute force.";
@@ -214,5 +215,5 @@ public partial class CrackerView : UserControl
 
     // ── Helpers ────────────────────────────────────────────────
     private SolidColorBrush Brush(string key) => (SolidColorBrush)(TryFindResource(key) ?? Brushes.Gray);
-    private Effect? Effect(string key) => TryFindResource(key) as Effect;
+    private Effect? FindEffect(string key) => TryFindResource(key) as Effect;
 }
