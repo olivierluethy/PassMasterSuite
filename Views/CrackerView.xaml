@@ -1,0 +1,128 @@
+<UserControl x:Class="PassMasterSuite.Views.CrackerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             TextElement.Foreground="{StaticResource Brush.TextPrimary}"
+             FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="44,40,44,40" MaxWidth="820" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Cracker" Style="{StaticResource Text.Display}"/>
+                <TextBlock Style="{StaticResource Text.Body}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,8,0,0"
+                           Text="Type a password and watch how a computer would guess it by brute force. Nothing leaves your machine — this is a safe, offline demonstration."/>
+            </StackPanel>
+
+            <!-- Setup + estimate -->
+            <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,24,0,0">
+                <StackPanel>
+                    <TextBlock Text="Password to test" Style="{StaticResource Text.Small}"/>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="PwInput" Grid.Column="0" Style="{StaticResource Input.TextBox.Mono}"
+                                 VerticalContentAlignment="Center" TextChanged="Input_Changed"/>
+                        <Button x:Name="BtnStart" Grid.Column="1" Style="{StaticResource Button.Primary}" Margin="10,0,0,0"
+                                Click="Start_Click">
+                            <Button.ToolTip>Start the brute-force demonstration</Button.ToolTip>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{StaticResource Glyph.Play}" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                           Foreground="{StaticResource Brush.AccentText}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Start" Margin="8,0,0,0" Foreground="{StaticResource Brush.AccentText}"
+                                           FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnStop" Grid.Column="1" Style="{StaticResource Button.Danger}" Margin="10,0,0,0"
+                                Click="Stop_Click" Visibility="Collapsed">
+                            <Button.ToolTip>Stop the demonstration</Button.ToolTip>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{StaticResource Glyph.Stop}" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Text="Stop" Margin="8,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <TextBlock x:Name="InputError" Style="{StaticResource Text.Small}" Foreground="{StaticResource Brush.Danger}"
+                               Margin="2,8,0,0" Visibility="Collapsed" Text="Type a password first."/>
+
+                    <Border Height="1" Background="{StaticResource Brush.Border}" Margin="0,20,0,20"/>
+
+                    <!-- Attacker speed -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.Speed}"
+                                   FontSize="15" Foreground="{StaticResource Brush.Accent}"/>
+                        <TextBlock Text="Attacker speed" Style="{StaticResource Text.Body}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <WrapPanel x:Name="PresetPanel" Margin="0,10,0,0">
+                        <ToggleButton x:Name="Chip0" Style="{StaticResource Chip.Toggle}" Content="Online (throttled)"
+                                      Margin="0,0,10,10" Click="Preset_Click"/>
+                        <ToggleButton x:Name="Chip1" Style="{StaticResource Chip.Toggle}" Content="Offline (slow hash)"
+                                      Margin="0,0,10,10" Click="Preset_Click"/>
+                        <ToggleButton x:Name="Chip2" Style="{StaticResource Chip.Toggle}" Content="Offline (fast hash)"
+                                      IsChecked="True" Margin="0,0,10,10" Click="Preset_Click"/>
+                        <ToggleButton x:Name="Chip3" Style="{StaticResource Chip.Toggle}" Content="GPU array"
+                                      Margin="0,0,10,10" Click="Preset_Click"/>
+                    </WrapPanel>
+                    <TextBlock x:Name="PresetDesc" Style="{StaticResource Text.Muted}" Margin="0,2,0,0"/>
+
+                    <Border Height="1" Background="{StaticResource Brush.Border}" Margin="0,20,0,20"/>
+
+                    <!-- Estimate -->
+                    <TextBlock Text="Average time to crack" Style="{StaticResource Text.Small}"/>
+                    <TextBlock x:Name="EstHeadline" Style="{StaticResource Text.Display}" FontSize="30" Margin="0,4,0,0"
+                               Foreground="{StaticResource Brush.Accent}" Text="—"/>
+                    <TextBlock x:Name="EstMeta" Style="{StaticResource Text.Muted}" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Simulation -->
+            <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="Live brute-force attempt" Style="{StaticResource Text.H2}"/>
+                    <TextBlock x:Name="StatusText" Style="{StaticResource Text.Muted}" Margin="0,6,0,0"
+                               Text="Enter a password above and press Start to watch the guessing begin."/>
+
+                    <!-- Current candidate -->
+                    <Border x:Name="CandidateBox" CornerRadius="12" Background="{StaticResource Brush.SurfaceRaised}"
+                            BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" Padding="20,18" Margin="0,16,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Currently trying" Style="{StaticResource Text.Muted}"/>
+                            <TextBlock x:Name="CurrentCandidate" Style="{StaticResource Text.MonoLarge}" Margin="0,6,0,0"
+                                       Foreground="{StaticResource Brush.Accent}" Text="········"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Running-only progress + countdown -->
+                    <StackPanel x:Name="RunPanel" Margin="0,16,0,0" Visibility="Collapsed">
+                        <ProgressBar x:Name="Prog" Style="{StaticResource ProgressBar.Themed}" Minimum="0" Maximum="100" Value="0"/>
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.Clock}" FontSize="14"
+                                           Foreground="{StaticResource Brush.TextSecondary}"/>
+                                <TextBlock Text="Estimated time remaining" Style="{StaticResource Text.Small}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock x:Name="CountdownText" Grid.Column="1" Style="{StaticResource Text.Mono}" FontSize="14"
+                                       Foreground="{StaticResource Brush.TextPrimary}" Text="—"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Attempts ticker -->
+                    <TextBlock Text="Recent guesses" Style="{StaticResource Text.Small}" Margin="0,20,0,0"/>
+                    <Border CornerRadius="10" Background="{StaticResource Brush.Bg}" BorderBrush="{StaticResource Brush.Border}"
+                            BorderThickness="1" Padding="14,10" Margin="0,8,0,0" MinHeight="150">
+                        <StackPanel x:Name="Ticker"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

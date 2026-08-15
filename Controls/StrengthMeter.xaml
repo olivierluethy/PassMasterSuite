@@ -1,0 +1,26 @@
+<UserControl x:Class="PassMasterSuite.Controls.StrengthMeter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <Grid Height="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="Seg0" Grid.Column="0" CornerRadius="4" Background="{StaticResource Brush.Border}"/>
+            <Border x:Name="Seg1" Grid.Column="2" CornerRadius="4" Background="{StaticResource Brush.Border}"/>
+            <Border x:Name="Seg2" Grid.Column="4" CornerRadius="4" Background="{StaticResource Brush.Border}"/>
+            <Border x:Name="Seg3" Grid.Column="6" CornerRadius="4" Background="{StaticResource Brush.Border}"/>
+            <Border x:Name="Seg4" Grid.Column="8" CornerRadius="4" Background="{StaticResource Brush.Border}"/>
+        </Grid>
+        <TextBlock x:Name="Rating" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
+                   Foreground="{StaticResource Brush.TextMuted}" Text="—"/>
+    </StackPanel>
+</UserControl>

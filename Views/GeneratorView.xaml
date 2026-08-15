@@ -1,0 +1,109 @@
+<UserControl x:Class="PassMasterSuite.Views.GeneratorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:PassMasterSuite.Controls"
+             TextElement.Foreground="{StaticResource Brush.TextPrimary}"
+             FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="44,40,44,40" MaxWidth="760" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Generator" Style="{StaticResource Text.Display}"/>
+                <TextBlock Style="{StaticResource Text.Body}" Foreground="{StaticResource Brush.TextSecondary}" Margin="0,8,0,0"
+                           Text="Pick a length and the character classes to include. A new password is generated as you adjust the controls."/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,24,0,0">
+                <StackPanel>
+                    <!-- Password readout -->
+                    <TextBlock Text="Your password" Style="{StaticResource Text.Small}"/>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="PwBox" Grid.Column="0" Style="{StaticResource Input.TextBox.Mono}"
+                                 IsReadOnly="True" VerticalContentAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+                            <Button x:Name="BtnReveal" Style="{StaticResource IconButton}" Click="Reveal_Click" Margin="0,0,8,0">
+                                <Button.ToolTip>Show or hide the password</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="BtnCopy" Style="{StaticResource IconButton}" Click="Copy_Click" Margin="0,0,8,0"
+                                    Content="{StaticResource Glyph.Copy}">
+                                <Button.ToolTip>Copy the password to the clipboard</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="BtnRegen" Style="{StaticResource IconButton}" Click="Regen_Click"
+                                    Content="{StaticResource Glyph.Refresh}">
+                                <Button.ToolTip>Generate a new password</Button.ToolTip>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock x:Name="CopiedNote" Text="Copied to clipboard" FontSize="12"
+                               Foreground="{StaticResource Brush.Success}" Margin="2,8,0,0" Opacity="0"/>
+
+                    <Border Height="1" Background="{StaticResource Brush.Border}" Margin="0,20,0,20"/>
+
+                    <!-- Length -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Length" Style="{StaticResource Text.Body}" VerticalAlignment="Center"/>
+                        <Border Grid.Column="1" CornerRadius="999" Background="{StaticResource Brush.SurfaceRaised}"
+                                BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" Padding="12,4">
+                            <TextBlock Style="{StaticResource Text.Mono}" FontSize="14"
+                                       Text="{Binding Value, ElementName=SlLength, StringFormat={}{0:0}}"/>
+                        </Border>
+                    </Grid>
+                    <Slider x:Name="SlLength" Style="{StaticResource Slider.Themed}" Margin="0,10,0,0"
+                            Minimum="4" Maximum="64" Value="16" SmallChange="1" LargeChange="4"
+                            TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="Length_Changed">
+                        <Slider.ToolTip>Set how many characters the password has</Slider.ToolTip>
+                    </Slider>
+
+                    <Border Height="1" Background="{StaticResource Brush.Border}" Margin="0,20,0,20"/>
+
+                    <!-- Character classes -->
+                    <TextBlock Text="Include" Style="{StaticResource Text.Body}"/>
+                    <WrapPanel Margin="0,10,0,0">
+                        <ToggleButton x:Name="ChipLower" Style="{StaticResource Chip.Toggle}" Content="a–z" IsChecked="True"
+                                      Margin="0,0,10,10" Checked="Option_Changed" Unchecked="Option_Changed">
+                            <ToggleButton.ToolTip>Include lowercase letters</ToggleButton.ToolTip>
+                        </ToggleButton>
+                        <ToggleButton x:Name="ChipUpper" Style="{StaticResource Chip.Toggle}" Content="A–Z" IsChecked="True"
+                                      Margin="0,0,10,10" Checked="Option_Changed" Unchecked="Option_Changed">
+                            <ToggleButton.ToolTip>Include uppercase letters</ToggleButton.ToolTip>
+                        </ToggleButton>
+                        <ToggleButton x:Name="ChipDigits" Style="{StaticResource Chip.Toggle}" Content="0–9" IsChecked="True"
+                                      Margin="0,0,10,10" Checked="Option_Changed" Unchecked="Option_Changed">
+                            <ToggleButton.ToolTip>Include digits</ToggleButton.ToolTip>
+                        </ToggleButton>
+                        <ToggleButton x:Name="ChipSymbols" Style="{StaticResource Chip.Toggle}" Content="!@#" IsChecked="True"
+                                      Margin="0,0,10,10" Checked="Option_Changed" Unchecked="Option_Changed">
+                            <ToggleButton.ToolTip>Include symbols like ! ? # $</ToggleButton.ToolTip>
+                        </ToggleButton>
+                    </WrapPanel>
+
+                    <Border Height="1" Background="{StaticResource Brush.Border}" Margin="0,20,0,20"/>
+
+                    <!-- Strength -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Strength" Style="{StaticResource Text.Body}"/>
+                        <TextBlock x:Name="EntropyNote" Grid.Column="1" Style="{StaticResource Text.Muted}"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                    <controls:StrengthMeter x:Name="Meter" Margin="0,12,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

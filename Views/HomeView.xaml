@@ -1,0 +1,117 @@
+<UserControl x:Class="PassMasterSuite.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             TextElement.Foreground="{StaticResource Brush.TextPrimary}"
+             FontFamily="Segoe UI">
+    <UserControl.Resources>
+        <Style x:Key="HomeCard" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="14" Background="{StaticResource Brush.Surface}"
+                                BorderBrush="{StaticResource Brush.Border}" BorderThickness="1"
+                                Padding="22" Effect="{StaticResource Effect.CardShadow}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource Brush.SurfaceRaised}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="44,40,44,40" MaxWidth="1000" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Hero -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="PASSWORD TOOLKIT" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{StaticResource Brush.Accent}"/>
+                <TextBlock Text="Understand your passwords." Style="{StaticResource Text.Display}" Margin="0,10,0,0"/>
+                <TextBlock Style="{StaticResource Text.Body}" Foreground="{StaticResource Brush.TextSecondary}"
+                           MaxWidth="620" HorizontalAlignment="Left" Margin="0,10,0,0"
+                           Text="Generate strong passwords, measure how strong they really are, and watch how an attacker would try to crack them — everything runs offline on your machine."/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="1" Text="Choose a tool" Style="{StaticResource Text.H2}" Margin="0,34,0,14"/>
+
+            <!-- Tool cards -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="CardGenerator" Grid.Column="0" Style="{StaticResource HomeCard}" Click="CardGenerator_Click">
+                    <Button.ToolTip>Build a random password from the character classes you choose.</Button.ToolTip>
+                    <StackPanel>
+                        <Border Width="46" Height="46" CornerRadius="12" Background="{StaticResource Brush.AccentTint}" HorizontalAlignment="Left">
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.Generate}"
+                                       FontSize="22" Foreground="{StaticResource Brush.Accent}"/>
+                        </Border>
+                        <TextBlock Text="Generator" Style="{StaticResource Text.H2}" Margin="0,16,0,0"/>
+                        <TextBlock Style="{StaticResource Text.Small}" Margin="0,6,0,0"
+                                   Text="Build a strong password from the classes you pick, and copy it when ready."/>
+                        <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                            <TextBlock Text="Open" FontSize="13" Foreground="{StaticResource Brush.Accent}" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.ChevronRight}"
+                                       FontSize="12" Foreground="{StaticResource Brush.Accent}" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="CardChecker" Grid.Column="2" Style="{StaticResource HomeCard}" Click="CardChecker_Click">
+                    <Button.ToolTip>Measure strength, entropy, and estimated time-to-crack.</Button.ToolTip>
+                    <StackPanel>
+                        <Border Width="46" Height="46" CornerRadius="12" Background="{StaticResource Brush.AccentTint}" HorizontalAlignment="Left">
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.Gauge}"
+                                       FontSize="22" Foreground="{StaticResource Brush.Accent}"/>
+                        </Border>
+                        <TextBlock Text="Checker" Style="{StaticResource Text.H2}" Margin="0,16,0,0"/>
+                        <TextBlock Style="{StaticResource Text.Small}" Margin="0,6,0,0"
+                                   Text="See strength, entropy, weaknesses, and how long it would take to crack."/>
+                        <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                            <TextBlock Text="Open" FontSize="13" Foreground="{StaticResource Brush.Accent}" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.ChevronRight}"
+                                       FontSize="12" Foreground="{StaticResource Brush.Accent}" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="CardCracker" Grid.Column="4" Style="{StaticResource HomeCard}" Click="CardCracker_Click">
+                    <Button.ToolTip>Watch an educational brute-force attack and see how long it takes.</Button.ToolTip>
+                    <StackPanel>
+                        <Border Width="46" Height="46" CornerRadius="12" Background="{StaticResource Brush.AccentTint}" HorizontalAlignment="Left">
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.Speed}"
+                                       FontSize="22" Foreground="{StaticResource Brush.Accent}"/>
+                        </Border>
+                        <TextBlock Text="Cracker" Style="{StaticResource Text.H2}" Margin="0,16,0,0"/>
+                        <TextBlock Style="{StaticResource Text.Small}" Margin="0,6,0,0"
+                                   Text="Watch a brute-force attack unfold and see the time change with attacker speed."/>
+                        <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                            <TextBlock Text="Open" FontSize="13" Foreground="{StaticResource Brush.Accent}" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource Icon}" Text="{StaticResource Glyph.ChevronRight}"
+                                       FontSize="12" Foreground="{StaticResource Brush.Accent}" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
