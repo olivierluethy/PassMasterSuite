@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Password_Checker__Generator_and_Cracker
+namespace PassMasterSuite;
+
+/// <summary>
+/// Application entry point. The shell window (Views/ShellWindow.xaml) hosts every tool as an
+/// in-place view, so there is a single window for the whole app.
+/// </summary>
+public partial class App : Application
 {
-  /// <summary>
-  /// Interaktionslogik für "App.xaml"
-  /// </summary>
-  public partial class App : Application
-  {
-  }
 }
